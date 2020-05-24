@@ -1,4 +1,4 @@
-package com.ajzamora.heavenbaked;
+package com.ajzamora.heavenbaked.adapters;
 
 import android.view.LayoutInflater;
 import android.view.View;
