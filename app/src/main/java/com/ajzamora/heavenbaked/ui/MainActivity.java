@@ -1,11 +1,13 @@
-package com.ajzamora.heavenbaked;
+package com.ajzamora.heavenbaked.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 
+import com.ajzamora.heavenbaked.R;
+import com.ajzamora.heavenbaked.adapters.RecipeAdapter;
 import com.ajzamora.heavenbaked.databinding.ActivityMainBinding;
 import com.ajzamora.heavenbaked.utils.LayoutUtils;
 
@@ -32,11 +34,13 @@ public class MainActivity extends AppCompatActivity implements RecipeAdapter.Rec
 
     @Override
     public void onListItemClick(int clickedItemIndex) {
-        launchToast(clickedItemIndex);
+        launchRecipeDetail(clickedItemIndex);
     }
 
-    private void launchToast(int clickedItemIndex) {
-        String currentRecipeName = mAdapter.getItem(clickedItemIndex);
-        Toast.makeText(this, " " + currentRecipeName, Toast.LENGTH_SHORT).show();
+    private void launchRecipeDetail(int clickedItemIndex) {
+        String recipe = mAdapter.getItem(clickedItemIndex);
+        Intent recipeDetail = new Intent(this, DetailActivity.class);
+        recipeDetail.putExtra(DetailActivity.EXTRA_RECIPE, recipe);
+        startActivity(recipeDetail);
     }
 }
