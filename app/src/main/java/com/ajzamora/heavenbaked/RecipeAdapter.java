@@ -1,6 +1,7 @@
 package com.ajzamora.heavenbaked;
 
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -14,15 +15,21 @@ import java.util.List;
 
 public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeViewHolder> {
     private List<String> mRecipes;
+    final private RecyclerItemClickListener mOnClickListener;
 
-    public RecipeAdapter() {
-        this(new ArrayList<String>());
+    public RecipeAdapter(RecyclerItemClickListener onClickListener) {
+        this(new ArrayList<String>(), onClickListener);
     }
 
-    public RecipeAdapter(List<String> recipes) {
+    public RecipeAdapter(List<String> recipes, RecyclerItemClickListener onClickListener) {
         // TODO: Delete fakeData
         // mRecipes = recipes; // uncomment after delete
         mRecipes = fakeData();
+        mOnClickListener = onClickListener;
+    }
+
+    public interface RecyclerItemClickListener {
+        void onListItemClick(int clickedItemIndex);
     }
 
     // TODO: Delete fakeData
@@ -56,17 +63,28 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
         return (mRecipes == null) ? 0 : mRecipes.size();
     }
 
-    public final class RecipeViewHolder extends RecyclerView.ViewHolder {
+    public String getItem(int position) {
+        return mRecipes.get(position);
+    }
+
+    public final class RecipeViewHolder extends RecyclerView.ViewHolder
+            implements View.OnClickListener {
         ItemRecipeBinding mItemRecipeBinding;
 
         RecipeViewHolder(ItemRecipeBinding itemRecipeBinding) {
             super(itemRecipeBinding.getRoot());
             mItemRecipeBinding = itemRecipeBinding;
+            itemView.setOnClickListener(this);
         }
 
         void bind(int position) {
             String recipe = mRecipes.get(position);
             mItemRecipeBinding.tvRecipeItem.setText(recipe);
+        }
+
+        @Override
+        public void onClick(View v) {
+            mOnClickListener.onListItemClick(getAdapterPosition());
         }
     }
 }
