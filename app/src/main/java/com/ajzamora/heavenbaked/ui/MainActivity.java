@@ -9,9 +9,10 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import com.ajzamora.heavenbaked.R;
 import com.ajzamora.heavenbaked.adapters.RecipeAdapter;
 import com.ajzamora.heavenbaked.databinding.ActivityMainBinding;
+import com.ajzamora.heavenbaked.interfaces.IRecyclerItemClickListener;
 import com.ajzamora.heavenbaked.utils.LayoutUtils;
 
-public class MainActivity extends AppCompatActivity implements RecipeAdapter.RecyclerItemClickListener {
+public class MainActivity extends AppCompatActivity implements IRecyclerItemClickListener {
     ActivityMainBinding mMainBinding;
     RecipeAdapter mAdapter;
 

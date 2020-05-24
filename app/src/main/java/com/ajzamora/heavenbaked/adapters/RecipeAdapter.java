@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ajzamora.heavenbaked.databinding.ItemRecipeBinding;
+import com.ajzamora.heavenbaked.interfaces.IRecyclerItemClickListener;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -15,21 +16,17 @@ import java.util.List;
 
 public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeViewHolder> {
     private List<String> mRecipes;
-    final private RecyclerItemClickListener mOnClickListener;
+    final private IRecyclerItemClickListener mOnClickListener;
 
-    public RecipeAdapter(RecyclerItemClickListener onClickListener) {
+    public RecipeAdapter(IRecyclerItemClickListener onClickListener) {
         this(new ArrayList<String>(), onClickListener);
     }
 
-    public RecipeAdapter(List<String> recipes, RecyclerItemClickListener onClickListener) {
+    public RecipeAdapter(List<String> recipes, IRecyclerItemClickListener onClickListener) {
         // TODO: Delete fakeData
         // mRecipes = recipes; // uncomment after delete
         mRecipes = fakeData();
         mOnClickListener = onClickListener;
-    }
-
-    public interface RecyclerItemClickListener {
-        void onListItemClick(int clickedItemIndex);
     }
 
     // TODO: Delete fakeData
