@@ -2,6 +2,8 @@ package com.ajzamora.heavenbaked.fragments;
 
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.media.session.MediaSessionCompat;
+import android.support.v4.media.session.PlaybackStateCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -38,6 +40,8 @@ public class RecipeStepFragment extends Fragment implements ExoPlayer.EventListe
 
     FragRecipeStepBinding mFragRecipeStepBinding;
     private SimpleExoPlayer mExoPlayer;
+    private MediaSessionCompat mMediaSession;
+    private PlaybackStateCompat.Builder mStateBuilder;
     private String mRecipeStep;
 
     public RecipeStepFragment() {
@@ -49,8 +53,55 @@ public class RecipeStepFragment extends Fragment implements ExoPlayer.EventListe
         mRecipeStep = getActivity().getIntent().getStringExtra(EXTRA_STEP);
         String stringUri = "asset:///clair_de_lune.mp3";
         mFragRecipeStepBinding = FragRecipeStepBinding.inflate(LayoutInflater.from(getContext()), container, false);
+        initializeMediaSession();
         initializePlayer(Uri.parse(stringUri));
         return mFragRecipeStepBinding.getRoot();
+    }
+
+    private void initializeMediaSession() {
+        // Create a MediaSessionCompat.
+        mMediaSession = new MediaSessionCompat(getContext(), LOG_TAG);
+
+        // Enable callbacks from MediaButtons and TransportControls.
+        mMediaSession.setFlags(
+                MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS |
+                        MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS);
+
+        // Do not let MediaButtons restart the player when the app is not visible.
+        mMediaSession.setMediaButtonReceiver(null);
+
+        // Set an initial PlaybackState with ACTION_PLAY, so media buttons can start the player.
+        mStateBuilder = new PlaybackStateCompat.Builder()
+                .setActions(
+                        PlaybackStateCompat.ACTION_PLAY |
+                                PlaybackStateCompat.ACTION_PAUSE |
+                                PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS |
+                                PlaybackStateCompat.ACTION_PLAY_PAUSE);
+
+        mMediaSession.setPlaybackState(mStateBuilder.build());
+
+        // MySessionCallback has methods that handle callbacks from a media controller.
+        mMediaSession.setCallback(new MySessionCallback());
+
+        // Start the Media Session since the activity is active.
+        mMediaSession.setActive(true);
+    }
+
+    private class MySessionCallback extends MediaSessionCompat.Callback {
+        @Override
+        public void onPlay() {
+            mExoPlayer.setPlayWhenReady(true);
+        }
+
+        @Override
+        public void onPause() {
+            mExoPlayer.setPlayWhenReady(false);
+        }
+
+        @Override
+        public void onSkipToPrevious() {
+            mExoPlayer.seekTo(0);
+        }
     }
 
     private void initializePlayer(Uri mediaUri) {
@@ -78,9 +129,10 @@ public class RecipeStepFragment extends Fragment implements ExoPlayer.EventListe
     }
 
     @Override
-    public void onDetach() {
-        super.onDetach();
+    public void onDestroy() {
+        super.onDestroy();
         releasePlayer();
+        mMediaSession.setActive(false);
     }
 
     @Override
@@ -100,10 +152,14 @@ public class RecipeStepFragment extends Fragment implements ExoPlayer.EventListe
 
     @Override
     public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
-        if((playbackState == Player.STATE_READY) && playWhenReady){
+        if ((playbackState == Player.STATE_READY) && playWhenReady) {
             Log.d(LOG_TAG, "onPlayerStateChanged: PLAYING");
-        } else if((playbackState == Player.STATE_READY)){
+            mStateBuilder.setState(PlaybackStateCompat.STATE_PLAYING,
+                    mExoPlayer.getCurrentPosition(), 1f);
+        } else if ((playbackState == Player.STATE_READY)) {
             Log.d(LOG_TAG, "onPlayerStateChanged: PAUSED");
+            mStateBuilder.setState(PlaybackStateCompat.STATE_PAUSED,
+                    mExoPlayer.getCurrentPosition(), 1f);
         }
     }
 
