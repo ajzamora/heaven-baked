@@ -161,6 +161,7 @@ public class RecipeStepFragment extends Fragment implements ExoPlayer.EventListe
             mStateBuilder.setState(PlaybackStateCompat.STATE_PAUSED,
                     mExoPlayer.getCurrentPosition(), 1f);
         }
+        mMediaSession.setPlaybackState(mStateBuilder.build());
     }
 
     @Override
