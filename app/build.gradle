@@ -6,7 +6,9 @@ android {
 
     defaultConfig {
         applicationId "com.ajzamora.heavenbaked"
-        minSdkVersion 16
+        // upgrade minSDK to 24
+        // no physical test device / ExoPlayer not running properly on emulator api 16-24
+        minSdkVersion 22
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
@@ -20,6 +22,11 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
+    compileOptions {
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
     viewBinding {
         enabled = true
     }
@@ -35,7 +42,19 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
-    implementation 'com.google.android.exoplayer:exoplayer:2.7.3'
+    implementation 'com.google.android.exoplayer:exoplayer:2.11.4'
     implementation 'androidx.core:core:1.2.0'
     implementation 'androidx.media:media:1.1.0'
+
+//    implementation fileTree(dir: 'libs', include: ['*.jar'])
+//    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+//        exclude group: 'com.android.support', module: 'support-annotations'
+//    })
+//    implementation 'com.google.android.exoplayer:exoplayer:r2.2.0'
+    //noinspection GradleCompatible
+//    implementation 'com.android.support:appcompat-v7:25.3.0'
+    //noinspection GradleCompatible
+//    implementation 'com.android.support:support-v4:28.0.0'
+//    testImplementation 'junit:junit:4.12'
+//    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
 }

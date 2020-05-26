@@ -136,7 +136,7 @@ public class RecipeStepFragment extends Fragment implements ExoPlayer.EventListe
     }
 
     @Override
-    public void onTimelineChanged(Timeline timeline, Object manifest, int reason) {
+    public void onTimelineChanged(Timeline timeline, int reason) {
 
     }
 
