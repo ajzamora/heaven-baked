@@ -9,8 +9,9 @@ import androidx.room.Transaction;
 import androidx.room.Update;
 
 import com.ajzamora.heavenbaked.data.entity.Recipe;
+import com.ajzamora.heavenbaked.data.entity.RecipeIngredientCrossRef;
 import com.ajzamora.heavenbaked.data.relations.RecipeWithIngredients;
-import com.ajzamora.heavenbaked.data.relations.RecipeWithMeasureAndIngredients;
+import com.ajzamora.heavenbaked.data.relations.RecipeWithIngredientsAndMeasure;
 
 import java.util.List;
 
@@ -21,8 +22,9 @@ public interface RecipeDao {
     public List<RecipeWithIngredients> getRecipesWithIngredients();
 
     @Transaction
-    @Query("SELECT * FROM measure")
-    public List<RecipeWithMeasureAndIngredients> getRecipeWithMeasureAndIngredients();
+    @Query("SELECT * FROM Measure")
+    public List<RecipeWithIngredientsAndMeasure> getRecipesWithIngredientsAndMeasure();
+
 
     @Query("SELECT * FROM recipe")
     List<Recipe> loadAllTasks();

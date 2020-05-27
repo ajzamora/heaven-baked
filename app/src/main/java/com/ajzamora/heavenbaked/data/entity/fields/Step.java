@@ -6,6 +6,10 @@ public class Step {
     @ColumnInfo(name = "steps_json_array")
     private String stepsJsonArray;
 
+    public Step(String stepsJsonArray) {
+        this.stepsJsonArray = stepsJsonArray;
+    }
+
     public String getStepsJsonArray() {
         return "getStepsJsonArray";
     }

@@ -5,6 +5,7 @@ import androidx.room.Junction;
 import androidx.room.Relation;
 
 import com.ajzamora.heavenbaked.data.entity.Ingredient;
+import com.ajzamora.heavenbaked.data.entity.Measure;
 import com.ajzamora.heavenbaked.data.entity.Recipe;
 import com.ajzamora.heavenbaked.data.entity.RecipeIngredientCrossRef;
 
