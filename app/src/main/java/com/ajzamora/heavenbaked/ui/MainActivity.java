@@ -8,13 +8,16 @@ import androidx.recyclerview.widget.GridLayoutManager;
 
 import com.ajzamora.heavenbaked.R;
 import com.ajzamora.heavenbaked.adapters.RecipeAdapter;
+import com.ajzamora.heavenbaked.utils.AppDatabase;
+import com.ajzamora.heavenbaked.data.entity.Recipe;
 import com.ajzamora.heavenbaked.databinding.ActivityMainBinding;
 import com.ajzamora.heavenbaked.interfaces.IRecyclerItemClickListener;
 import com.ajzamora.heavenbaked.utils.LayoutUtils;
 
 public class MainActivity extends AppCompatActivity implements IRecyclerItemClickListener {
-    ActivityMainBinding mMainBinding;
-    RecipeAdapter mAdapter;
+    private AppDatabase mDb;
+    private ActivityMainBinding mMainBinding;
+    private RecipeAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,6 +25,8 @@ public class MainActivity extends AppCompatActivity implements IRecyclerItemClic
         mMainBinding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(mMainBinding.getRoot());
         initUI();
+        mDb = AppDatabase.getInstance(getApplicationContext());
+//        mDb.recipeDao().insertRecipe(new Recipe(1L, "first", 1, new Step()));
     }
 
     private void initUI() {
@@ -39,9 +44,16 @@ public class MainActivity extends AppCompatActivity implements IRecyclerItemClic
     }
 
     private void launchRecipeDetail(int clickedItemIndex) {
-        String recipe = mAdapter.getItem(clickedItemIndex);
+        Recipe recipe = mAdapter.getItem(clickedItemIndex);
         Intent recipeDetail = new Intent(this, DetailActivity.class);
-        recipeDetail.putExtra(DetailActivity.EXTRA_RECIPE, recipe);
+        String stepStr = recipe.step == null ? "Sample Recipe Step" : recipe.step.getStepsJsonArray();
+        recipeDetail.putExtra(DetailActivity.EXTRA_RECIPE, stepStr);
         startActivity(recipeDetail);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mAdapter.setRecipes(mDb.recipeDao().loadAllTasks());
     }
 }

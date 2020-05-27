@@ -7,38 +7,29 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.ajzamora.heavenbaked.data.entity.Recipe;
 import com.ajzamora.heavenbaked.databinding.ItemRecipeBinding;
 import com.ajzamora.heavenbaked.interfaces.IRecyclerItemClickListener;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeViewHolder> {
-    private List<String> mRecipes;
+    private List<Recipe> mRecipes;
     final private IRecyclerItemClickListener mOnClickListener;
 
     public RecipeAdapter(IRecyclerItemClickListener onClickListener) {
-        this(new ArrayList<String>(), onClickListener);
+        this(new ArrayList<Recipe>(), onClickListener);
     }
 
-    public RecipeAdapter(List<String> recipes, IRecyclerItemClickListener onClickListener) {
-        // TODO: Delete fakeData
-        // mRecipes = recipes; // uncomment after delete
-        mRecipes = fakeData();
+    public RecipeAdapter(List<Recipe> recipes, IRecyclerItemClickListener onClickListener) {
+        mRecipes = recipes;
         mOnClickListener = onClickListener;
     }
 
-    // TODO: Delete fakeData
-    private List<String> fakeData() {
-        String[] fakeArray = {"Nutella", "Peanut Butter & Jelly", "Butter",
-                "Jam", "Cheese", "Egg", "Bacon", "Ipsum", "Nutella", "Peanut Butter & Jelly", "Butter",
-                "Jam", "Cheese", "Egg", "Bacon", "Ipsum", "Nutella", "Peanut Butter & Jelly", "Butter",
-                "Jam", "Cheese", "Egg", "Bacon", "Ipsum", "Nutella", "Peanut Butter & Jelly", "Butter",
-                "Jam", "Cheese", "Egg", "Bacon", "Ipsum", "Nutella", "Peanut Butter & Jelly", "Butter",
-                "Jam", "Cheese", "Egg", "Bacon", "Ipsum", "Nutella", "Peanut Butter & Jelly", "Butter",
-                "Jam", "Cheese", "Egg", "Bacon", "end"};
-        return Arrays.asList(fakeArray);
+    public void setRecipes(List<Recipe> recipes) {
+        mRecipes = recipes;
+        notifyDataSetChanged();
     }
 
     @NonNull
@@ -60,7 +51,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
         return (mRecipes == null) ? 0 : mRecipes.size();
     }
 
-    public String getItem(int position) {
+    public Recipe getItem(int position) {
         return mRecipes.get(position);
     }
 
@@ -75,8 +66,8 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
         }
 
         void bind(int position) {
-            String recipe = mRecipes.get(position);
-            mItemRecipeBinding.tvRecipeItem.setText(recipe);
+            Recipe recipe = mRecipes.get(position);
+            mItemRecipeBinding.tvRecipeItem.setText(recipe.getName());
         }
 
         @Override
