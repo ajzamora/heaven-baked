@@ -6,14 +6,15 @@ import android.util.Log;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
+import androidx.room.TypeConverters;
 
+import com.ajzamora.heavenbaked.data.converters.IngredientListConverter;
+import com.ajzamora.heavenbaked.data.converters.StepListConverter;
 import com.ajzamora.heavenbaked.data.dao.RecipeDao;
-import com.ajzamora.heavenbaked.data.entity.Ingredient;
-import com.ajzamora.heavenbaked.data.entity.Measure;
 import com.ajzamora.heavenbaked.data.entity.Recipe;
-import com.ajzamora.heavenbaked.data.entity.RecipeIngredientCrossRef;
 
-@Database(entities = {Recipe.class, Ingredient.class, RecipeIngredientCrossRef.class, Measure.class}, version = 1, exportSchema = false)
+@Database(entities = {Recipe.class}, version = 1, exportSchema = false)
+@TypeConverters({IngredientListConverter.class, StepListConverter.class})
 public abstract class AppDatabase extends RoomDatabase {
 
     private static final String LOG_TAG = AppDatabase.class.getSimpleName();
