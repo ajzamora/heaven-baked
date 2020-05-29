@@ -54,6 +54,9 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
     public Recipe getItem(int position) {
         return mRecipes.get(position);
     }
+    public List<Recipe> getAllItems() {
+        return mRecipes;
+    }
 
     public final class RecipeViewHolder extends RecyclerView.ViewHolder
             implements View.OnClickListener {

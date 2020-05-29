@@ -40,12 +40,12 @@ public class MainActivity extends AppCompatActivity implements IRecyclerItemClic
         setContentView(mMainBinding.getRoot());
         initUI();
         mDb = AppDatabase.getInstance(getApplicationContext());
-//        mDb.recipeDao().insertRecipe(new Recipe(1L, "first", 1, new Step()));
+
         List<Recipe> recipeList = mDb.recipeDao().getRecipeList();
         if (recipeList == null || recipeList.isEmpty()) {
             if (NetworkUtils.isOnline(this)) {
                 download();
-                Log.v(LOG_TAG, "done");
+                mDb.recipeDao().insertAllRecipe(mAdapter.getAllItems());
             }
         }
     }
