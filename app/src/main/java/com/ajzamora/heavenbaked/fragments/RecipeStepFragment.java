@@ -44,7 +44,7 @@ public class RecipeStepFragment extends Fragment implements ExoPlayer.EventListe
     public static final String EXTRA_STEP = "extra_step";
     public static final String EXTRA_STEP_INDEX = "extra_step_index";
 
-    FragRecipeStepBinding mFragRecipeStepBinding;
+    private FragRecipeStepBinding mFragRecipeStepBinding;
     private SimpleExoPlayer mExoPlayer;
     private MediaSessionCompat mMediaSession;
     private PlaybackStateCompat.Builder mStateBuilder;
@@ -61,6 +61,9 @@ public class RecipeStepFragment extends Fragment implements ExoPlayer.EventListe
         if(savedInstanceState != null) {
             mStepList = savedInstanceState.getParcelableArrayList(EXTRA_STEP);
             mStepIndex = savedInstanceState.getInt(EXTRA_STEP_INDEX, 0);
+        } else {
+            mStepList = getActivity().getIntent().getExtras().getParcelableArrayList(EXTRA_STEP);
+            mStepIndex = getActivity().getIntent().getExtras().getInt(EXTRA_STEP_INDEX, 0);
         }
 
         mFragRecipeStepBinding = FragRecipeStepBinding.inflate(LayoutInflater.from(getContext()), container, false);
