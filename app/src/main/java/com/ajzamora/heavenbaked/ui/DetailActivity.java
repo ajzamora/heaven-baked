@@ -35,6 +35,7 @@ public class DetailActivity extends AppCompatActivity implements RecipeDetailFra
                 FragmentManager fragmentManager = getSupportFragmentManager();
                 RecipeStepFragment recipeStepFragment = new RecipeStepFragment();
                 recipeStepFragment.setStepList(mRecipe.getSteps());
+                recipeStepFragment.setStepIndex(0);
                 fragmentManager.beginTransaction()
                         .add(R.id.fl_step_container, recipeStepFragment)
                         .commit();

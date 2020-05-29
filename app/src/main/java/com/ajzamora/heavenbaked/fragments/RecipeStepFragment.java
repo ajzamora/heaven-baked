@@ -59,11 +59,10 @@ public class RecipeStepFragment extends Fragment implements ExoPlayer.EventListe
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         if(savedInstanceState != null) {
+            Log.v("data if", "");
             mStepList = savedInstanceState.getParcelableArrayList(EXTRA_STEP);
             mStepIndex = savedInstanceState.getInt(EXTRA_STEP_INDEX, 0);
-        } else {
-            mStepList = getActivity().getIntent().getExtras().getParcelableArrayList(EXTRA_STEP);
-            mStepIndex = getActivity().getIntent().getExtras().getInt(EXTRA_STEP_INDEX, 0);
+//            Log.v("data if", mStepList.get(mStepIndex).getShortDescription());
         }
 
         mFragRecipeStepBinding = FragRecipeStepBinding.inflate(LayoutInflater.from(getContext()), container, false);
@@ -214,10 +213,7 @@ public class RecipeStepFragment extends Fragment implements ExoPlayer.EventListe
 
     }
 
-    public void setStepList(List<Step> stepList) {
-        mStepList = stepList;
-    }
-
+    public void setStepList(List<Step> stepList) { mStepList = stepList; }
 
     public void setStepIndex(int stepIndex) {
         mStepIndex = stepIndex;
