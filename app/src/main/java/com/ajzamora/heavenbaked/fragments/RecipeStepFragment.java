@@ -2,6 +2,7 @@ package com.ajzamora.heavenbaked.fragments;
 
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
 import android.util.Log;
@@ -14,6 +15,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.ajzamora.heavenbaked.R;
+import com.ajzamora.heavenbaked.data.Step;
 import com.ajzamora.heavenbaked.databinding.FragRecipeStepBinding;
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.ExoPlaybackException;
@@ -34,15 +36,20 @@ import com.google.android.exoplayer2.trackselection.TrackSelector;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class RecipeStepFragment extends Fragment implements ExoPlayer.EventListener {
     private static final String LOG_TAG = RecipeStepFragment.class.getSimpleName();
     public static final String EXTRA_STEP = "extra_step";
+    public static final String EXTRA_STEP_INDEX = "extra_step_index";
 
     FragRecipeStepBinding mFragRecipeStepBinding;
     private SimpleExoPlayer mExoPlayer;
     private MediaSessionCompat mMediaSession;
     private PlaybackStateCompat.Builder mStateBuilder;
-    private String mRecipeStep;
+    private List<Step> mStepList;
+    private int mStepIndex;
 
     public RecipeStepFragment() {
     }
@@ -50,9 +57,19 @@ public class RecipeStepFragment extends Fragment implements ExoPlayer.EventListe
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        mRecipeStep = getActivity().getIntent().getStringExtra(EXTRA_STEP);
-        String stringUri = "asset:///clair_de_lune.mp3";
+
+        if(savedInstanceState != null) {
+            mStepList = savedInstanceState.getParcelableArrayList(EXTRA_STEP);
+            mStepIndex = savedInstanceState.getInt(EXTRA_STEP_INDEX, 0);
+        }
+
         mFragRecipeStepBinding = FragRecipeStepBinding.inflate(LayoutInflater.from(getContext()), container, false);
+
+        if(mStepList != null) mFragRecipeStepBinding.frTvStepDetail.setText(mStepList.get(mStepIndex).getDescription());
+        else Log.v(LOG_TAG, "This fragment has a null step list");
+
+        String stringUri = "asset:///clair_de_lune.mp3";
+
         initializeMediaSession();
         initializePlayer(Uri.parse(stringUri));
         return mFragRecipeStepBinding.getRoot();
@@ -192,5 +209,20 @@ public class RecipeStepFragment extends Fragment implements ExoPlayer.EventListe
     @Override
     public void onSeekProcessed() {
 
+    }
+
+    public void setStepList(List<Step> stepList) {
+        mStepList = stepList;
+    }
+
+
+    public void setStepIndex(int stepIndex) {
+        mStepIndex = stepIndex;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle currentState) {
+        currentState.putParcelableArrayList(EXTRA_STEP, (ArrayList<? extends Parcelable>) mStepList);
+        currentState.putInt(EXTRA_STEP_INDEX, mStepIndex);
     }
 }
