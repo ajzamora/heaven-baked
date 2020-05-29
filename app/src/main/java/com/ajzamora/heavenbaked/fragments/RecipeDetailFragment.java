@@ -18,7 +18,6 @@ import com.ajzamora.heavenbaked.data.Ingredient;
 import com.ajzamora.heavenbaked.data.Step;
 import com.ajzamora.heavenbaked.data.entity.Recipe;
 import com.ajzamora.heavenbaked.databinding.FragRecipeDetailBinding;
-import com.ajzamora.heavenbaked.interfaces.IRecyclerItemClickListener;
 import com.ajzamora.heavenbaked.ui.DetailActivity;
 import com.ajzamora.heavenbaked.ui.StepActivity;
 
@@ -26,7 +25,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class RecipeDetailFragment extends Fragment implements IRecyclerItemClickListener {
+public class RecipeDetailFragment extends Fragment {
+    private static final int INGREDIENT_GROUP_POSITION = 0;
+    private static final int STEP_GROUP_POSITION = 1;
+    private static final String SUFFIX_S = "s";
     private Recipe mRecipe;
     private FragRecipeDetailBinding mFragRecipeDetailBinding;
 
@@ -51,7 +53,6 @@ public class RecipeDetailFragment extends Fragment implements IRecyclerItemClick
         mExpandableListDetail = new HashMap<>();
         mRecipe = getActivity().getIntent().getParcelableExtra(DetailActivity.EXTRA_RECIPE);
 
-        final String SUFFIX_S = "s";
         test(Ingredient.class.getSimpleName().concat(SUFFIX_S).toUpperCase(), mRecipe.getIngredients());
         test(Step.class.getSimpleName().concat(SUFFIX_S).toUpperCase(), mRecipe.getSteps());
     }
@@ -71,7 +72,7 @@ public class RecipeDetailFragment extends Fragment implements IRecyclerItemClick
 
         mExpandableListAdapter = new RecipeDetailsExpandableListAdapter(getContext(), mExpandableListTitle, mExpandableListDetail);
         mFragRecipeDetailBinding.expandableListView.setAdapter(mExpandableListAdapter);
-        mFragRecipeDetailBinding.expandableListView.expandGroup(0);
+        mFragRecipeDetailBinding.expandableListView.expandGroup(INGREDIENT_GROUP_POSITION);
         mFragRecipeDetailBinding.expandableListView.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
             @Override
             public void onGroupExpand(int groupPosition) {
@@ -100,20 +101,15 @@ public class RecipeDetailFragment extends Fragment implements IRecyclerItemClick
                                 mExpandableListTitle.get(groupPosition)).get(
                                 childPosition), Toast.LENGTH_SHORT
                 ).show();
+                if (groupPosition == STEP_GROUP_POSITION) launchRecipeStep(childPosition);
                 return false;
             }
         });
     }
 
-    // TODO: refactor
     private void launchRecipeStep(int clickedItemIndex) {
         Intent recipeStep = new Intent(getContext(), StepActivity.class);
         recipeStep.putExtra(RecipeStepFragment.EXTRA_STEP, mRecipe.getSteps().get(clickedItemIndex).getShortDescription());
         startActivity(recipeStep);
-    }
-
-    @Override
-    public void onListItemClick(int clickedItemIndex) {
-        launchRecipeStep(clickedItemIndex);
     }
 }
