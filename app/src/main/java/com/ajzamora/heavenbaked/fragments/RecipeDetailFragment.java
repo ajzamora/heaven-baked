@@ -84,7 +84,16 @@ public class RecipeDetailFragment extends Fragment {
         List<String> values = new ArrayList<>();
         int count = 1;
         for (T obj : objList) {
-            if (obj instanceof Ingredient) values.add(((Ingredient) obj).getIngredient());
+            if (obj instanceof Ingredient) {
+                Ingredient ingredient = ((Ingredient) obj);
+                final char SEPARATOR = ' ';
+                final String HYPHEN_IN_SPACES = " - ";
+                StringBuilder valueBuilder = new StringBuilder();
+                valueBuilder.append(ingredient.getQuantity());
+                valueBuilder.append(SEPARATOR).append(ingredient.getMeasure());
+                valueBuilder.append(HYPHEN_IN_SPACES).append(ingredient.getIngredient());
+                values.add(valueBuilder.toString());
+            }
             else if (obj instanceof Step) {
                 String prefix = String.valueOf(count).concat(". ");
                 values.add(prefix.concat(((Step) obj).getShortDescription()));
