@@ -5,21 +5,35 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ExpandableListAdapter;
+import android.widget.ExpandableListView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
-import com.ajzamora.heavenbaked.adapters.RecipeDetailAdapter;
+import com.ajzamora.heavenbaked.adapters.RecipeDetailsExpandableListAdapter;
+import com.ajzamora.heavenbaked.data.Ingredient;
+import com.ajzamora.heavenbaked.data.Step;
+import com.ajzamora.heavenbaked.data.entity.Recipe;
 import com.ajzamora.heavenbaked.databinding.FragRecipeDetailBinding;
 import com.ajzamora.heavenbaked.interfaces.IRecyclerItemClickListener;
 import com.ajzamora.heavenbaked.ui.DetailActivity;
 import com.ajzamora.heavenbaked.ui.StepActivity;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
 public class RecipeDetailFragment extends Fragment implements IRecyclerItemClickListener {
-    private String mRecipeDetail;
+    private Recipe mRecipe;
+    private FragRecipeDetailBinding mFragRecipeDetailBinding;
+
+    ExpandableListAdapter mExpandableListAdapter;
+    List<String> mExpandableListTitle;
+    HashMap<String, List<String>> mExpandableListDetail;
+
 
     public RecipeDetailFragment() {
     }
@@ -27,18 +41,73 @@ public class RecipeDetailFragment extends Fragment implements IRecyclerItemClick
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        mRecipeDetail = getActivity().getIntent().getStringExtra(DetailActivity.EXTRA_RECIPE);
-        FragRecipeDetailBinding fragRecipeDetailBinding = FragRecipeDetailBinding.inflate(LayoutInflater.from(getContext()), container, false);
-        RecipeDetailAdapter recipeDetailAdapter = new RecipeDetailAdapter(mRecipeDetail, this);
-        fragRecipeDetailBinding.rvRecipeDetail.setAdapter(recipeDetailAdapter);
-        fragRecipeDetailBinding.rvRecipeDetail.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
-        fragRecipeDetailBinding.rvRecipeDetail.setHasFixedSize(true);
-        return fragRecipeDetailBinding.getRoot();
+        initializeExpandableListData();
+        initUI(container);
+        return mFragRecipeDetailBinding.getRoot();
     }
 
+    private void initializeExpandableListData() {
+        mExpandableListTitle = new ArrayList<>();
+        mExpandableListDetail = new HashMap<>();
+        mRecipe = getActivity().getIntent().getParcelableExtra(DetailActivity.EXTRA_RECIPE);
+
+        final String SUFFIX_S = "s";
+        test(Ingredient.class.getSimpleName().concat(SUFFIX_S).toUpperCase(), mRecipe.getIngredients());
+        test(Step.class.getSimpleName().concat(SUFFIX_S).toUpperCase(), mRecipe.getSteps());
+    }
+
+    private <T> void test(final String title, List<T> objList) {
+        mExpandableListTitle.add(title);
+        List<String> values = new ArrayList<>();
+        for (T obj : objList) {
+            if (obj instanceof Ingredient) values.add(((Ingredient) obj).getIngredient());
+            else if (obj instanceof Step) values.add(((Step) obj).getShortDescription());
+        }
+        mExpandableListDetail.put(title, values);
+    }
+
+    private void initUI(ViewGroup container) {
+        mFragRecipeDetailBinding = FragRecipeDetailBinding.inflate(LayoutInflater.from(getContext()), container, false);
+
+        mExpandableListAdapter = new RecipeDetailsExpandableListAdapter(getContext(), mExpandableListTitle, mExpandableListDetail);
+        mFragRecipeDetailBinding.expandableListView.setAdapter(mExpandableListAdapter);
+        mFragRecipeDetailBinding.expandableListView.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
+            @Override
+            public void onGroupExpand(int groupPosition) {
+                Toast.makeText(getActivity().getApplicationContext(),
+                        mExpandableListTitle.get(groupPosition) + " List Expanded.",
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
+        mFragRecipeDetailBinding.expandableListView.setOnGroupCollapseListener(new ExpandableListView.OnGroupCollapseListener() {
+            @Override
+            public void onGroupCollapse(int groupPosition) {
+                Toast.makeText(getActivity().getApplicationContext(),
+                        mExpandableListTitle.get(groupPosition) + " List Collapsed.",
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
+        mFragRecipeDetailBinding.expandableListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
+            @Override
+            public boolean onChildClick(ExpandableListView parent, View v,
+                                        int groupPosition, int childPosition, long id) {
+                Toast.makeText(
+                        getActivity().getApplicationContext(),
+                        mExpandableListTitle.get(groupPosition)
+                                + " -> "
+                                + mExpandableListDetail.get(
+                                mExpandableListTitle.get(groupPosition)).get(
+                                childPosition), Toast.LENGTH_SHORT
+                ).show();
+                return false;
+            }
+        });
+    }
+
+    // TODO: refactor
     private void launchRecipeStep(int clickedItemIndex) {
         Intent recipeStep = new Intent(getContext(), StepActivity.class);
-        recipeStep.putExtra(RecipeStepFragment.EXTRA_STEP, mRecipeDetail);
+        recipeStep.putExtra(RecipeStepFragment.EXTRA_STEP, mRecipe.getSteps().get(clickedItemIndex).getShortDescription());
         startActivity(recipeStep);
     }
 
