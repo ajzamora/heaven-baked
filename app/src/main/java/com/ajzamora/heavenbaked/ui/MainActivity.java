@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -11,12 +12,10 @@ import androidx.recyclerview.widget.GridLayoutManager;
 
 import com.ajzamora.heavenbaked.R;
 import com.ajzamora.heavenbaked.adapters.RecipeAdapter;
-import com.ajzamora.heavenbaked.data.Ingredient;
-import com.ajzamora.heavenbaked.data.Step;
-import com.ajzamora.heavenbaked.utils.AppDatabase;
 import com.ajzamora.heavenbaked.data.entity.Recipe;
 import com.ajzamora.heavenbaked.databinding.ActivityMainBinding;
 import com.ajzamora.heavenbaked.interfaces.IRecyclerItemClickListener;
+import com.ajzamora.heavenbaked.utils.AppDatabase;
 import com.ajzamora.heavenbaked.utils.LayoutUtils;
 import com.ajzamora.heavenbaked.utils.NetworkUtils;
 import com.ajzamora.heavenbaked.utils.RecipeUtils;
@@ -68,7 +67,7 @@ public class MainActivity extends AppCompatActivity implements IRecyclerItemClic
     private void launchRecipeDetail(int clickedItemIndex) {
         Recipe recipe = mAdapter.getItem(clickedItemIndex);
         Intent recipeDetail = new Intent(this, DetailActivity.class);
-        recipeDetail.putExtra(DetailActivity.EXTRA_RECIPE, recipe);
+        recipeDetail.putExtra(DetailActivity.EXTRA_RECIPE, (Parcelable) recipe);
         startActivity(recipeDetail);
     }
 
@@ -99,8 +98,7 @@ public class MainActivity extends AppCompatActivity implements IRecyclerItemClic
                             .parseRecipe((new JSONArray(jsonRecipeResponse)));
                 } catch (IOException e) {
                     Log.e(LOG_TAG, "Problem retrieving the recipe JSON results.", e);
-                }
-                catch (JSONException e) {
+                } catch (JSONException e) {
                     Log.e(LOG_TAG, "Problem parsing the recipe JSON results: " + jsonRecipeResponse, e);
                 }
                 return simpleJsonRecipeData;
