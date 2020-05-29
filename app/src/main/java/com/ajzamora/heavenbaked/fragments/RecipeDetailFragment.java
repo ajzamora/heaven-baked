@@ -71,6 +71,7 @@ public class RecipeDetailFragment extends Fragment implements IRecyclerItemClick
 
         mExpandableListAdapter = new RecipeDetailsExpandableListAdapter(getContext(), mExpandableListTitle, mExpandableListDetail);
         mFragRecipeDetailBinding.expandableListView.setAdapter(mExpandableListAdapter);
+        mFragRecipeDetailBinding.expandableListView.expandGroup(0);
         mFragRecipeDetailBinding.expandableListView.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
             @Override
             public void onGroupExpand(int groupPosition) {
