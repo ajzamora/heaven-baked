@@ -1,8 +1,6 @@
 package com.ajzamora.heavenbaked.ui;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.util.Log;
@@ -16,6 +14,7 @@ import com.ajzamora.heavenbaked.data.entity.Recipe;
 import com.ajzamora.heavenbaked.databinding.ActivityMainBinding;
 import com.ajzamora.heavenbaked.interfaces.IRecyclerItemClickListener;
 import com.ajzamora.heavenbaked.utils.AppDatabase;
+import com.ajzamora.heavenbaked.utils.AppExecutors;
 import com.ajzamora.heavenbaked.utils.LayoutUtils;
 import com.ajzamora.heavenbaked.utils.NetworkUtils;
 import com.ajzamora.heavenbaked.utils.RecipeUtils;
@@ -25,6 +24,7 @@ import org.json.JSONException;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements IRecyclerItemClickListener {
@@ -41,10 +41,11 @@ public class MainActivity extends AppCompatActivity implements IRecyclerItemClic
         initUI();
         mDb = AppDatabase.getInstance(getApplicationContext());
 
-        List<Recipe> recipeList = mDb.recipeDao().getRecipeList();
+//        List<Recipe> recipeList = mDb.recipeDao().getRecipeList();
+        List<Recipe> recipeList = new ArrayList<>();
         if (recipeList == null || recipeList.isEmpty()) {
             if (NetworkUtils.isOnline(this)) {
-                download();
+                fetchNetworkData();
                 mDb.recipeDao().insertAllRecipe(mAdapter.getAllItems());
             }
         }
@@ -74,19 +75,29 @@ public class MainActivity extends AppCompatActivity implements IRecyclerItemClic
     @Override
     protected void onResume() {
         super.onResume();
-        mAdapter.setRecipes(mDb.recipeDao().getRecipeList());
+        fetchDbData();
     }
 
-    @SuppressLint("StaticFieldLeak")
-    private void download() {
-        new AsyncTask<String, Void, List<Recipe>>() {
+    private void fetchDbData() {
+        AppExecutors.getInstance().diskIO().execute(new Runnable() {
             @Override
-            protected void onPostExecute(List<Recipe> recipes) {
-                mAdapter.setRecipes(recipes);
+            public void run() {
+                final List<Recipe> recipeList = mDb.recipeDao().getRecipeList();
+                // TODO: simplify
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mAdapter.setRecipes(recipeList);
+                    }
+                });
             }
+        });
+    }
 
+    private void fetchNetworkData() {
+        AppExecutors.getInstance().networkIO().execute(new Runnable() {
             @Override
-            protected List<Recipe> doInBackground(String... strings) {
+            public void run() {
                 URL recipeRequestUrl = NetworkUtils.buildUrl(RecipeUtils.BASE_URL, RecipeUtils.TOPHER_2017_SAMPLE_BAKING_PATH);
                 Log.v(LOG_TAG, recipeRequestUrl.toString());
                 List<Recipe> simpleJsonRecipeData = null;
@@ -101,8 +112,15 @@ public class MainActivity extends AppCompatActivity implements IRecyclerItemClic
                 } catch (JSONException e) {
                     Log.e(LOG_TAG, "Problem parsing the recipe JSON results: " + jsonRecipeResponse, e);
                 }
-                return simpleJsonRecipeData;
+                final List<Recipe> finalSimpleJsonRecipeData = simpleJsonRecipeData;
+                // TODO: simplify
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mAdapter.setRecipes(finalSimpleJsonRecipeData);
+                    }
+                });
             }
-        }.execute();
+        });
     }
 }
