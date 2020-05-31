@@ -13,7 +13,7 @@ public class Ingredient implements Serializable {
 
     @SerializedName("quantity")
     @Expose
-    private int quantity;
+    private double quantity;
     @SerializedName("measure")
     @Expose
     private String measure;
@@ -33,18 +33,18 @@ public class Ingredient implements Serializable {
      * @param measure
      * @param ingredient
      */
-    public Ingredient(int quantity, String measure, String ingredient) {
+    public Ingredient(double quantity, String measure, String ingredient) {
         super();
         this.quantity = quantity;
         this.measure = measure;
         this.ingredient = ingredient;
     }
 
-    public int getQuantity() {
+    public double getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(int quantity) {
+    public void setQuantity(double quantity) {
         this.quantity = quantity;
     }
 

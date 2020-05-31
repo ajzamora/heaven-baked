@@ -77,7 +77,7 @@ public final class RecipeUtils {
 
     public static Ingredient parseIngredient(JSONObject ingredientJSONObj) throws JSONException {
         String name = ingredientJSONObj.getString(INGREDIENT_NAME);
-        int quantity = ingredientJSONObj.getInt(INGREDIENT_QUANTITY);
+        double quantity = ingredientJSONObj.getDouble(INGREDIENT_QUANTITY);
         String measure = ingredientJSONObj.getString(INGREDIENT_MEASURE);
 
         return new Ingredient(quantity, measure, name);
