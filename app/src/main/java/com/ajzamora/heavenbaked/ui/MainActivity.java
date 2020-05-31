@@ -6,6 +6,8 @@ import android.os.Parcelable;
 import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.GridLayoutManager;
 
 import com.ajzamora.heavenbaked.R;
@@ -24,7 +26,6 @@ import org.json.JSONException;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements IRecyclerItemClickListener {
@@ -40,15 +41,11 @@ public class MainActivity extends AppCompatActivity implements IRecyclerItemClic
         setContentView(mMainBinding.getRoot());
         initUI();
         mDb = AppDatabase.getInstance(getApplicationContext());
+        fetchDbData();
 
-//        List<Recipe> recipeList = mDb.recipeDao().getRecipeList();
-        List<Recipe> recipeList = new ArrayList<>();
-        if (recipeList == null || recipeList.isEmpty()) {
-            if (NetworkUtils.isOnline(this)) {
-                fetchNetworkData();
-                mDb.recipeDao().insertAllRecipe(mAdapter.getAllItems());
-            }
-        }
+        // TODO: use repository;
+        // not working : fetching with live data is delayed
+        if (mAdapter.getItemCount()<=0 && NetworkUtils.isOnline(this)) { fetchNetworkData(); }
     }
 
     private void initUI() {
@@ -79,17 +76,11 @@ public class MainActivity extends AppCompatActivity implements IRecyclerItemClic
     }
 
     private void fetchDbData() {
-        AppExecutors.getInstance().diskIO().execute(new Runnable() {
+        final LiveData<List<Recipe>> recipeList = mDb.recipeDao().getRecipeList();
+        recipeList.observe(this, new Observer<List<Recipe>>() {
             @Override
-            public void run() {
-                final List<Recipe> recipeList = mDb.recipeDao().getRecipeList();
-                // TODO: simplify
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        mAdapter.setRecipes(recipeList);
-                    }
-                });
+            public void onChanged(List<Recipe> recipes) {
+                mAdapter.setRecipes(recipes);
             }
         });
     }
@@ -113,12 +104,10 @@ public class MainActivity extends AppCompatActivity implements IRecyclerItemClic
                     Log.e(LOG_TAG, "Problem parsing the recipe JSON results: " + jsonRecipeResponse, e);
                 }
                 final List<Recipe> finalSimpleJsonRecipeData = simpleJsonRecipeData;
-                // TODO: simplify
-                runOnUiThread(new Runnable() {
+                
+                AppExecutors.getInstance().diskIO().execute(new Runnable() {
                     @Override
-                    public void run() {
-                        mAdapter.setRecipes(finalSimpleJsonRecipeData);
-                    }
+                    public void run() { mDb.recipeDao().insertAllRecipe(finalSimpleJsonRecipeData); }
                 });
             }
         });
