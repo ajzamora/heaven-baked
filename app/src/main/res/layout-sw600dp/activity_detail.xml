@@ -19,7 +19,6 @@
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/verticalHalf"
         android:layout_width="3dp"
-        android:background="@color/accent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintGuide_percent="0.42" />

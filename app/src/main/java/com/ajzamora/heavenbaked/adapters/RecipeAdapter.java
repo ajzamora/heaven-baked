@@ -1,5 +1,6 @@
 package com.ajzamora.heavenbaked.adapters;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -7,9 +8,12 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.ajzamora.heavenbaked.R;
 import com.ajzamora.heavenbaked.data.entity.Recipe;
 import com.ajzamora.heavenbaked.databinding.ItemRecipeBinding;
 import com.ajzamora.heavenbaked.interfaces.IRecyclerItemClickListener;
+import com.ajzamora.heavenbaked.utils.AvatarUtils;
+import com.ajzamora.heavenbaked.utils.AvatarUtils.BakerAvatarPicker;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,14 +21,18 @@ import java.util.List;
 public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeViewHolder> {
     private List<Recipe> mRecipes;
     final private IRecyclerItemClickListener mOnClickListener;
+    private Context mContext;
+    private BakerAvatarPicker mBakerAvatarPicker;
 
-    public RecipeAdapter(IRecyclerItemClickListener onClickListener) {
-        this(new ArrayList<Recipe>(), onClickListener);
+    public RecipeAdapter(Context context, IRecyclerItemClickListener onClickListener) {
+        this(new ArrayList<Recipe>(), context, onClickListener);
     }
 
-    public RecipeAdapter(List<Recipe> recipes, IRecyclerItemClickListener onClickListener) {
+    public RecipeAdapter(List<Recipe> recipes, Context context, IRecyclerItemClickListener onClickListener) {
         mRecipes = recipes;
         mOnClickListener = onClickListener;
+        mContext = context;
+        mBakerAvatarPicker = new BakerAvatarPicker(mContext);
     }
 
     public void setRecipes(List<Recipe> recipes) {
@@ -71,6 +79,9 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
         void bind(int position) {
             Recipe recipe = mRecipes.get(position);
             mItemRecipeBinding.tvRecipeItem.setText(recipe.getName());
+            mItemRecipeBinding.ivRecipeItem.
+                    setImageDrawable(mBakerAvatarPicker.getRandomContextAvatar(AvatarUtils.COMMON_BAKER_NAME));
+            mItemRecipeBinding.tvRecipeServingsItem.setText(mContext.getString(R.string.recipe_servings, recipe.getServings()));
         }
 
         @Override

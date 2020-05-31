@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity implements IRecyclerItemClic
     private void initUI() {
         final int COLUMN_WIDTH = getResources().getInteger(R.integer.rv_recipe_column_widthDp);
         final int COLUMN_NUM = LayoutUtils.calculateNoOfColumns(this, COLUMN_WIDTH);
-        mAdapter = new RecipeAdapter(this);
+        mAdapter = new RecipeAdapter(this, this);
         mMainBinding.rvRecipeMain.setAdapter(mAdapter);
         mMainBinding.rvRecipeMain.setLayoutManager(new GridLayoutManager(this, COLUMN_NUM));
         mMainBinding.rvRecipeMain.setHasFixedSize(true);

@@ -8,6 +8,6 @@
     <TextView
         android:id="@+id/tv_recipe_detail_item"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/recipe_item_height"
+        android:layout_height="@dimen/recipe_detail_item_height"
         android:gravity="center" />
 </FrameLayout>
