@@ -6,8 +6,7 @@ import android.os.Parcelable;
 import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.GridLayoutManager;
 
 import com.ajzamora.heavenbaked.R;
@@ -20,6 +19,7 @@ import com.ajzamora.heavenbaked.utils.AppExecutors;
 import com.ajzamora.heavenbaked.utils.LayoutUtils;
 import com.ajzamora.heavenbaked.utils.NetworkUtils;
 import com.ajzamora.heavenbaked.utils.RecipeUtils;
+import com.ajzamora.heavenbaked.viewmodels.MainViewModel;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -41,11 +41,13 @@ public class MainActivity extends AppCompatActivity implements IRecyclerItemClic
         setContentView(mMainBinding.getRoot());
         initUI();
         mDb = AppDatabase.getInstance(getApplicationContext());
-        fetchDbData();
+        setupViewModel();
 
         // TODO: use repository;
         // not working : fetching with live data is delayed
-        if (mAdapter.getItemCount()<=0 && NetworkUtils.isOnline(this)) { fetchNetworkData(); }
+        if (mAdapter.getItemCount() <= 0 && NetworkUtils.isOnline(this)) {
+            fetchNetworkData();
+        }
     }
 
     private void initUI() {
@@ -72,16 +74,14 @@ public class MainActivity extends AppCompatActivity implements IRecyclerItemClic
     @Override
     protected void onResume() {
         super.onResume();
-        fetchDbData();
     }
 
-    private void fetchDbData() {
-        final LiveData<List<Recipe>> recipeList = mDb.recipeDao().getRecipeList();
-        recipeList.observe(this, new Observer<List<Recipe>>() {
-            @Override
-            public void onChanged(List<Recipe> recipes) {
-                mAdapter.setRecipes(recipes);
-            }
+
+    private void setupViewModel() {
+        MainViewModel viewModel = ViewModelProviders.of(this).get(MainViewModel.class);
+        viewModel.getRecipeList().observe(this, recipeList -> {
+            Log.d(LOG_TAG, "Updating list of recipes from LiveData in ViewModel");
+            mAdapter.setRecipes(recipeList);
         });
     }
 
@@ -104,10 +104,12 @@ public class MainActivity extends AppCompatActivity implements IRecyclerItemClic
                     Log.e(LOG_TAG, "Problem parsing the recipe JSON results: " + jsonRecipeResponse, e);
                 }
                 final List<Recipe> finalSimpleJsonRecipeData = simpleJsonRecipeData;
-                
+
                 AppExecutors.getInstance().diskIO().execute(new Runnable() {
                     @Override
-                    public void run() { mDb.recipeDao().insertAllRecipe(finalSimpleJsonRecipeData); }
+                    public void run() {
+                        mDb.recipeDao().insertAllRecipe(finalSimpleJsonRecipeData);
+                    }
                 });
             }
         });
