@@ -19,6 +19,13 @@ public class StepActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_step);
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+            getSupportActionBar().hide();
+        }
+        else {
+            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        }
 
         // Only create new fragments when there is no previously saved state
         if(savedInstanceState == null) {
