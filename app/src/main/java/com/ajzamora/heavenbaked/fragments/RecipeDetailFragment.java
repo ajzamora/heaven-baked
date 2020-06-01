@@ -18,6 +18,7 @@ import com.ajzamora.heavenbaked.data.Step;
 import com.ajzamora.heavenbaked.data.entity.Recipe;
 import com.ajzamora.heavenbaked.databinding.FragRecipeDetailBinding;
 import com.ajzamora.heavenbaked.ui.DetailActivity;
+import com.ajzamora.heavenbaked.utils.FormatUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -89,8 +90,11 @@ public class RecipeDetailFragment extends Fragment {
                 final char SEPARATOR = ' ';
                 final String HYPHEN_IN_SPACES = " - ";
                 StringBuilder valueBuilder = new StringBuilder();
-                valueBuilder.append(ingredient.getQuantity());
-                valueBuilder.append(SEPARATOR).append(ingredient.getMeasure());
+                valueBuilder.append(FormatUtils.toFormattedStringDecimal(ingredient.getQuantity(), 2));
+
+                valueBuilder.append(SEPARATOR)
+                        .append(ingredient.getMeasure());
+
                 valueBuilder.append(HYPHEN_IN_SPACES).append(ingredient.getIngredient());
                 values.add(valueBuilder.toString());
             }

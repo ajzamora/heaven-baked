@@ -6,7 +6,7 @@ import android.graphics.drawable.Drawable;
 
 import androidx.core.content.ContextCompat;
 
-public class AvatarUtils {
+public final class AvatarUtils {
     private static final String RES_TYPE_DRAWABLE = "drawable";
     public static final String COMMON_BAKER_NAME = "ic_baker";
     private static final int NUM_BAKER_DRAWABLE = 9;
