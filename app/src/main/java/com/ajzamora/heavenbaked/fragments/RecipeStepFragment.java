@@ -67,12 +67,12 @@ public class RecipeStepFragment extends Fragment implements ExoPlayer.EventListe
 
         mFragRecipeStepBinding = FragRecipeStepBinding.inflate(LayoutInflater.from(getContext()), container, false);
 
+        Log.v("if null print index", "index " + mStepIndex);
         if(mStepList != null) mFragRecipeStepBinding.frTvStepDetail.setText(mStepList.get(mStepIndex).getDescription());
         else Log.v(LOG_TAG, "This fragment has a null step list");
 
-        String stringUri = "asset:///clair_de_lune.mp3";
-
         initializeMediaSession();
+        String stringUri = mStepList.get(mStepIndex).getVideoURL();
         initializePlayer(Uri.parse(stringUri));
         return mFragRecipeStepBinding.getRoot();
     }
