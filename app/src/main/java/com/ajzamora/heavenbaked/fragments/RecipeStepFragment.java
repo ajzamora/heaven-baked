@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -64,6 +65,8 @@ public class RecipeStepFragment extends Fragment implements ExoPlayer.EventListe
         }
 
         mFragRecipeStepBinding = FragRecipeStepBinding.inflate(LayoutInflater.from(getContext()), container, false);
+        mFragRecipeStepBinding.frTvStepDetail.setMovementMethod(new ScrollingMovementMethod());
+
         if(mStepList != null) mFragRecipeStepBinding.frTvStepDetail.setText(mStepList.get(mStepIndex).getDescription());
         else Log.v(LOG_TAG, "This fragment has a null step list");
 

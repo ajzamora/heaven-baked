@@ -22,6 +22,7 @@
         <item name="android:layout_marginLeft">@dimen/custom_exoplayerview_text_view_margin</item>
         <item name="android:layout_marginRight">@dimen/custom_exoplayerview_text_view_margin</item>
         <item name="android:fontFamily">casual</item>
+        <item name="android:scrollbars">vertical</item>
         <item name="android:lineSpacingExtra">@dimen/custom_exoplayerview_text_view_lines_pacing</item>
         <item name="android:textSize">@dimen/custom_exoplayerview_text_view_size</item>
     </style>
