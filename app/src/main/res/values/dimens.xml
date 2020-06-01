@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <dimen name="no_dp">0dp</dimen>
+
     <dimen name="recipe_detail_item_height">100dp</dimen>
 
     <dimen name="recipe_item_layout">100dp</dimen>
@@ -19,4 +21,8 @@
     <dimen name="expandable_list_group_padding">10dp</dimen>
 
     <dimen name="video_view_exo_player_play_pause_button_dimen">48dp</dimen>
+    <dimen name="custom_exoplayerview_text_view_margin">30dp</dimen>
+    <dimen name="custom_exoplayerview_text_view_lines_pacing">12sp</dimen>
+    <dimen name="custom_exoplayerview_text_view_size">24sp</dimen>
+
 </resources>

@@ -8,6 +8,23 @@
         <item name="colorAccent">@color/accent</item>
     </style>
 
+    <style name="CustomExoPlayerView">
+        <item name="android:layout_width">@dimen/no_dp</item>
+        <item name="android:layout_height">@dimen/no_dp</item>
+        <item name="android:layout_marginLeft">@dimen/no_dp</item>
+        <item name="android:layout_marginTop">@dimen/no_dp</item>
+        <item name="android:layout_marginRight">@dimen/no_dp</item>
+        <item name="android:layout_marginBottom">@dimen/no_dp</item>
+    </style>
+
+    <style name="CustomExoPlayerViewTextDetails">
+        <item name="android:layout_marginTop">@dimen/custom_exoplayerview_text_view_margin</item>
+        <item name="android:layout_marginLeft">@dimen/custom_exoplayerview_text_view_margin</item>
+        <item name="android:layout_marginRight">@dimen/custom_exoplayerview_text_view_margin</item>
+        <item name="android:fontFamily">casual</item>
+        <item name="android:lineSpacingExtra">@dimen/custom_exoplayerview_text_view_lines_pacing</item>
+        <item name="android:textSize">@dimen/custom_exoplayerview_text_view_size</item>
+    </style>
     <!-- ExoPlayer Styles -->
     <style name="CustomExoMediaButton">
         <item name="android:background">?android:attr/selectableItemBackground</item>
