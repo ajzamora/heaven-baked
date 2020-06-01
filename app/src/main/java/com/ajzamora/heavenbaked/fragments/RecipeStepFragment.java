@@ -59,15 +59,11 @@ public class RecipeStepFragment extends Fragment implements ExoPlayer.EventListe
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         if(savedInstanceState != null) {
-            Log.v("data if", "");
             mStepList = savedInstanceState.getParcelableArrayList(EXTRA_STEP);
             mStepIndex = savedInstanceState.getInt(EXTRA_STEP_INDEX, 0);
-//            Log.v("data if", mStepList.get(mStepIndex).getShortDescription());
         }
 
         mFragRecipeStepBinding = FragRecipeStepBinding.inflate(LayoutInflater.from(getContext()), container, false);
-
-        Log.v("if null print index", "index " + mStepIndex);
         if(mStepList != null) mFragRecipeStepBinding.frTvStepDetail.setText(mStepList.get(mStepIndex).getDescription());
         else Log.v(LOG_TAG, "This fragment has a null step list");
 

@@ -83,7 +83,7 @@ public class RecipeDetailFragment extends Fragment {
     private <T> void convertListToMap(final String title, List<T> objList) {
         mExpandableListTitle.add(title);
         List<String> values = new ArrayList<>();
-        int count = 1;
+        int count = 0;
         for (T obj : objList) {
             if (obj instanceof Ingredient) {
                 Ingredient ingredient = ((Ingredient) obj);
@@ -100,6 +100,7 @@ public class RecipeDetailFragment extends Fragment {
             }
             else if (obj instanceof Step) {
                 String prefix = String.valueOf(count).concat(". ");
+                if (count==0) prefix = "";
                 values.add(prefix.concat(((Step) obj).getShortDescription()));
                 count++;
             }
