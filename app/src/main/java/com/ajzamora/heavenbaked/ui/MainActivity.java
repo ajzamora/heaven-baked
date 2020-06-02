@@ -9,6 +9,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.GridLayoutManager;
 
+import com.ajzamora.heavenbaked.HeavenBakedWidgetProvider;
+import com.ajzamora.heavenbaked.IngredientsListingService;
 import com.ajzamora.heavenbaked.R;
 import com.ajzamora.heavenbaked.adapters.RecipeAdapter;
 import com.ajzamora.heavenbaked.data.entity.Recipe;
@@ -62,6 +64,8 @@ public class MainActivity extends AppCompatActivity implements IRecyclerItemClic
     @Override
     public void onListItemClick(int clickedItemIndex) {
         launchRecipeDetail(clickedItemIndex);
+        Recipe recipe = mAdapter.getItem(clickedItemIndex);
+        IngredientsListingService.startListingIngredients(this, recipe);
     }
 
     private void launchRecipeDetail(int clickedItemIndex) {

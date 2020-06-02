@@ -1,4 +1,6 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="app_name">HeavenBaked</string>
-    <string name="recipe_servings">Servings: <xliff:g id="num_servings" example="2">%d</xliff:g></string>
+    <string name="recipe_servings">Servings: <xliff:g example="2" id="num_servings">%d</xliff:g></string>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="add_widget">Add widget</string>
 </resources>
