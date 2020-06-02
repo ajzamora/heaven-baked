@@ -1,0 +1,29 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/widget_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@android:color/white"
+    android:padding="@dimen/widget_margin">
+
+    <TextView
+        android:background="@color/primary"
+        android:id="@+id/tv_recipe_label_widget"
+        android:layout_width="match_parent"
+        android:textAllCaps="true"
+        android:textColor="@android:color/white"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:textSize="18sp"
+        android:fontFamily="serif"
+        android:text="Last viewed recipe"/>
+
+    <TextView
+        android:id="@+id/tv_ingredients_widget"
+        android:padding="10dp"
+        android:textSize="18sp"
+        android:fontFamily="casual"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="List of ingredients"/>
+</LinearLayout>
