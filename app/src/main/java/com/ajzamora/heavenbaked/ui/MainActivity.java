@@ -5,13 +5,17 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.VisibleForTesting;
+import androidx.test.espresso.IdlingResource;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.GridLayoutManager;
 
-import com.ajzamora.heavenbaked.HeavenBakedWidgetProvider;
 import com.ajzamora.heavenbaked.IngredientsListingService;
 import com.ajzamora.heavenbaked.R;
+import com.ajzamora.heavenbaked.SimpleIdlingResource;
 import com.ajzamora.heavenbaked.adapters.RecipeAdapter;
 import com.ajzamora.heavenbaked.data.entity.Recipe;
 import com.ajzamora.heavenbaked.databinding.ActivityMainBinding;
@@ -36,6 +40,18 @@ public class MainActivity extends AppCompatActivity implements IRecyclerItemClic
     private ActivityMainBinding mMainBinding;
     private RecipeAdapter mAdapter;
 
+    @Nullable
+    private SimpleIdlingResource mIdlingResource;
+
+    @VisibleForTesting
+    @NonNull
+    public IdlingResource getIdlingResource() {
+        if (mIdlingResource == null) {
+            mIdlingResource = new SimpleIdlingResource();
+        }
+        return mIdlingResource;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,6 +60,7 @@ public class MainActivity extends AppCompatActivity implements IRecyclerItemClic
         initUI();
         mDb = AppDatabase.getInstance(getApplicationContext());
         setupViewModel();
+        getIdlingResource();
 
         // TODO: use repository;
         // not working : fetching with live data is delayed
@@ -90,6 +107,7 @@ public class MainActivity extends AppCompatActivity implements IRecyclerItemClic
     }
 
     private void fetchNetworkData() {
+        mIdlingResource.setIdleState(false);
         AppExecutors.getInstance().networkIO().execute(new Runnable() {
             @Override
             public void run() {
@@ -113,6 +131,7 @@ public class MainActivity extends AppCompatActivity implements IRecyclerItemClic
                     @Override
                     public void run() {
                         mDb.recipeDao().insertAllRecipe(finalSimpleJsonRecipeData);
+                        mIdlingResource.setIdleState(true);
                     }
                 });
             }

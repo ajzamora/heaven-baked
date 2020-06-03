@@ -43,11 +43,14 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test:rules:1.2.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-contrib:3.2.0'
+    implementation 'androidx.test.espresso:espresso-idling-resource:3.2.0'
 
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
     implementation 'com.google.android.exoplayer:exoplayer:2.11.4'
     implementation 'androidx.core:core:1.2.0'
     implementation 'androidx.media:media:1.1.0'
+
 
     // room
     def room_version = "2.2.5"
