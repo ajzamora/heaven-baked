@@ -71,7 +71,10 @@ public class RecipeStepFragment extends Fragment implements ExoPlayer.EventListe
         else Log.v(LOG_TAG, "This fragment has a null step list");
 
         initializeMediaSession();
-        String stringUri = mStepList.get(mStepIndex).getVideoURL();
+        String stringUri = "";
+        if (mStepList != null) {
+            stringUri = mStepList.get(mStepIndex).getVideoURL();
+        }
         initializePlayer(Uri.parse(stringUri));
         return mFragRecipeStepBinding.getRoot();
     }

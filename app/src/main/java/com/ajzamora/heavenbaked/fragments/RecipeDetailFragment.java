@@ -75,9 +75,11 @@ public class RecipeDetailFragment extends Fragment {
         mExpandableListDetail = new HashMap<>();
 
         mRecipe = Objects.requireNonNull(getActivity()).getIntent().getParcelableExtra(DetailActivity.EXTRA_RECIPE);
+        if (mRecipe != null) {
+            convertListToMap(Ingredient.class.getSimpleName().concat(SUFFIX_S).toUpperCase(), mRecipe.getIngredients());
+            convertListToMap(Step.class.getSimpleName().concat(SUFFIX_S).toUpperCase(), mRecipe.getSteps());
+        }
 
-        convertListToMap(Ingredient.class.getSimpleName().concat(SUFFIX_S).toUpperCase(), mRecipe.getIngredients());
-        convertListToMap(Step.class.getSimpleName().concat(SUFFIX_S).toUpperCase(), mRecipe.getSteps());
     }
 
     private <T> void convertListToMap(final String title, List<T> objList) {

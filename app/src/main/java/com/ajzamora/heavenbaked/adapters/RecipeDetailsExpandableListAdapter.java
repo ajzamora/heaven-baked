@@ -53,8 +53,12 @@ public class RecipeDetailsExpandableListAdapter extends BaseExpandableListAdapte
 
     @Override
     public int getChildrenCount(int listPosition) {
-        return this.expandableListDetail.get(this.expandableListTitle.get(listPosition))
-                .size();
+        if (this.expandableListDetail.size() > 0) {
+            return this.expandableListDetail.get(this.expandableListTitle.get(listPosition))
+                    .size();
+        } else {
+            return 0;
+        }
     }
 
     @Override
