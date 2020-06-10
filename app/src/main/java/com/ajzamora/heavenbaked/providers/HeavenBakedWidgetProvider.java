@@ -1,17 +1,21 @@
-package com.ajzamora.heavenbaked;
+package com.ajzamora.heavenbaked.providers;
 
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Parcelable;
-import android.text.method.ScrollingMovementMethod;
+import android.util.Log;
 import android.widget.RemoteViews;
 
+import com.ajzamora.heavenbaked.R;
 import com.ajzamora.heavenbaked.data.Ingredient;
 import com.ajzamora.heavenbaked.data.entity.Recipe;
+import com.ajzamora.heavenbaked.services.IngredientsListingService;
 import com.ajzamora.heavenbaked.ui.DetailActivity;
+import com.ajzamora.heavenbaked.ui.MainActivity;
 import com.ajzamora.heavenbaked.utils.FormatUtils;
 
 import java.util.List;
@@ -24,7 +28,7 @@ public class HeavenBakedWidgetProvider extends AppWidgetProvider {
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager, Recipe recipe,
                                 int appWidgetId) {
 
-        // Create an Intent to launch DetailActivity when clicked
+            // Create an Intent to launch DetailActivity when clicked
         Intent intent = new Intent(context, DetailActivity.class);
         intent.putExtra(DetailActivity.EXTRA_RECIPE, (Parcelable) recipe);
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
@@ -36,6 +40,10 @@ public class HeavenBakedWidgetProvider extends AppWidgetProvider {
         views.setOnClickPendingIntent(R.id.widget_layout, pendingIntent);
         // Instruct the widget manager to update the widget
         appWidgetManager.updateAppWidget(appWidgetId, views);
+    }
+
+    static void initializeAppWidget(Context context, AppWidgetManager appWidgetManager, int appWidgetId) {
+        Log.v("test", "initializeAppWidget");
     }
 
     private static String formatIngredientList(List<Ingredient> ingredients) {
@@ -59,6 +67,15 @@ public class HeavenBakedWidgetProvider extends AppWidgetProvider {
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
 //        IngredientsListingService.startListingIngredients(context);
+
+        AppWidgetManager mgr = AppWidgetManager.getInstance(context);
+        RemoteViews defaultViews = new RemoteViews(context.getPackageName(), R.layout.heaven_baked_widget);
+        Intent idefault = new Intent(context, MainActivity.class);
+        idefault.putExtra("widget", "1");
+        PendingIntent defaultpendingIntent = PendingIntent.getActivity(context, 0, idefault, 0);
+        defaultViews.setOnClickPendingIntent(R.id.widget_layout, defaultpendingIntent);
+        ComponentName comp = new ComponentName(context.getPackageName(), HeavenBakedWidgetProvider.class.getName());
+        mgr.updateAppWidget(comp, defaultViews);
     }
 
     public static void updateRecipeWidgets(Context context, AppWidgetManager appWidgetManager,
@@ -70,7 +87,24 @@ public class HeavenBakedWidgetProvider extends AppWidgetProvider {
 
     @Override
     public void onEnabled(Context context) {
+        Log.v("test", "onEnabled");
         // Enter relevant functionality for when the first widget is created
+//        Intent intent = new Intent(context, MainActivity.class);
+//        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
+//        RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.heaven_baked_widget);
+//        views.setOnClickPendingIntent(R.id.widget_layout, pendingIntent);
+//        appWidgetManager.updateAppWidget(appWidgetId, views);
+
+
+//        AppWidgetManager mgr = AppWidgetManager.getInstance(context);
+//        RemoteViews defaultViews = new RemoteViews(context.getPackageName(), R.layout.heaven_baked_widget);
+//        Intent idefault = new Intent(context, MainActivity.class);
+//        idefault.putExtra("widget", "1");
+//        PendingIntent defaultpendingIntent = PendingIntent.getActivity(context, 0, idefault, 0);
+//        defaultViews.setOnClickPendingIntent(R.id.widget_layout, defaultpendingIntent);
+//        ComponentName comp = new ComponentName(context.getPackageName(), HeavenBakedWidgetProvider.class.getName());
+//        mgr.updateAppWidget(comp, defaultViews);
+
     }
 
     @Override

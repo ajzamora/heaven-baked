@@ -7,8 +7,8 @@ android {
     defaultConfig {
         applicationId "com.ajzamora.heavenbaked"
         // upgrade minSDK to 24
-        // no physical test device / ExoPlayer not running properly on emulator api 16-24
-        minSdkVersion 22
+        // no physical test device / ExoPlayer not running properly on emulator api 16-23
+        minSdkVersion 24
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
@@ -38,17 +38,9 @@ dependencies {
 
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
-    testImplementation 'junit:junit:4.13'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
-    androidTestImplementation 'androidx.test:runner:1.2.0'
-    androidTestImplementation 'androidx.test:rules:1.2.0'
-    androidTestImplementation 'androidx.test.espresso:espresso-contrib:3.2.0'
-    implementation 'androidx.test.espresso:espresso-idling-resource:3.2.0'
-
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
     implementation 'com.google.android.exoplayer:exoplayer:2.11.4'
-    implementation 'androidx.core:core:1.2.0'
+    implementation 'androidx.core:core:1.3.0'
     implementation 'androidx.media:media:1.1.0'
 
 
@@ -73,10 +65,23 @@ dependencies {
 
     // Testing-only dependencies
     testImplementation 'junit:junit:4.13'
-    androidTestImplementation 'com.android.support:support-annotations:28.0.0'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-intents:3.0.2'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
+    implementation "androidx.annotation:annotation:1.1.0"
+    implementation 'androidx.test.espresso:espresso-idling-resource:3.2.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+    androidTestImplementation 'androidx.test:rules:1.3.0-rc01'
+    androidTestImplementation 'androidx.test.espresso:espresso-contrib:3.2.0'
+
+    androidTestImplementation 'androidx.test:core:1.2.0'
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test:rules:1.2.0'
+
+    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
+    androidTestImplementation 'androidx.test.ext:truth:1.2.0'
+    androidTestImplementation 'com.google.truth:truth:1.0'
+
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-contrib:3.2.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-intents:3.2.0'
+//
+    androidTestImplementation 'androidx.test.espresso.idling:idling-concurrent:3.2.0'
 }

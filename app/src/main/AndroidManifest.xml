@@ -12,20 +12,37 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <service android:name=".IngredientsListingService" />
-        <receiver android:name=".HeavenBakedWidgetProvider">
+        <service android:name=".services.IngredientsListingService" />
+        <receiver android:name=".providers.HeavenBakedWidgetProvider">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="android.appwidget.action.APPWIDGET_ENABLED "/>
             </intent-filter>
 
             <meta-data
                 android:name="android.appwidget.provider"
                 android:resource="@xml/heaven_baked_widget_info" />
         </receiver>
-
-        <activity android:name=".ui.StepActivity" />
-        <activity android:name=".ui.DetailActivity" />
-        <activity android:name=".ui.MainActivity">
+        <activity android:name=".ExampleAppWidgetConfigure">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE"/>
+            </intent-filter>
+        </activity>
+        <activity android:name=".ui.StepActivity"
+            android:parentActivityName=".ui.DetailActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.DetailActivity" />
+        </activity>
+        <activity android:name=".ui.DetailActivity"
+            android:parentActivityName=".ui.MainActivity"
+            android:launchMode="singleTop">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.MainActivity" />
+        </activity>
+        <activity android:name=".ui.MainActivity"
+            android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

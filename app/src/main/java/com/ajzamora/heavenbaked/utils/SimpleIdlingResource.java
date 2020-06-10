@@ -1,4 +1,4 @@
-package com.ajzamora.heavenbaked;
+package com.ajzamora.heavenbaked.utils;
 
 import androidx.annotation.Nullable;
 import androidx.test.espresso.IdlingResource;

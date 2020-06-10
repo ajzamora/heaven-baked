@@ -116,6 +116,7 @@ public class RecipeDetailFragment extends Fragment {
         mExpandableListAdapter = new RecipeDetailsExpandableListAdapter(getContext(), mExpandableListTitle, mExpandableListDetail);
         mFragRecipeDetailBinding.expandableListView.setAdapter(mExpandableListAdapter);
         mFragRecipeDetailBinding.expandableListView.expandGroup(STEP_GROUP_POSITION);
+        mFragRecipeDetailBinding.expandableListView.expandGroup(INGREDIENT_GROUP_POSITION);
         mFragRecipeDetailBinding.expandableListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
             @Override
             public boolean onChildClick(ExpandableListView parent, View v,

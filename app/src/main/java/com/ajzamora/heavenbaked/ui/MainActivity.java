@@ -13,9 +13,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.GridLayoutManager;
 
-import com.ajzamora.heavenbaked.IngredientsListingService;
+import com.ajzamora.heavenbaked.services.IngredientsListingService;
 import com.ajzamora.heavenbaked.R;
-import com.ajzamora.heavenbaked.SimpleIdlingResource;
+import com.ajzamora.heavenbaked.utils.SimpleIdlingResource;
 import com.ajzamora.heavenbaked.adapters.RecipeAdapter;
 import com.ajzamora.heavenbaked.data.entity.Recipe;
 import com.ajzamora.heavenbaked.databinding.ActivityMainBinding;

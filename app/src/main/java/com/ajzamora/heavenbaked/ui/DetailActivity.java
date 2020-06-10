@@ -3,8 +3,13 @@ package com.ajzamora.heavenbaked.ui;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.view.MenuItem;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NavUtils;
+import androidx.core.app.TaskStackBuilder;
 import androidx.fragment.app.FragmentManager;
 
 import com.ajzamora.heavenbaked.R;
@@ -29,6 +34,12 @@ public class DetailActivity extends AppCompatActivity implements RecipeDetailFra
 
         mRecipe = getIntent().getParcelableExtra(EXTRA_RECIPE);
 
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            if (mRecipe != null) actionBar.setTitle(mRecipe.getName());
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
+
         if (findViewById(R.id.fl_step_container) != null) {
             mTwoPane = true;
             if (savedInstanceState == null) {
@@ -48,7 +59,6 @@ public class DetailActivity extends AppCompatActivity implements RecipeDetailFra
         }
     }
 
-
     @Override
     public void onStepSelected(int stepIndex) {
         if (mTwoPane) {
@@ -66,6 +76,27 @@ public class DetailActivity extends AppCompatActivity implements RecipeDetailFra
             final Intent recipeStep = new Intent(this, StepActivity.class);
             recipeStep.putExtras(bundle);
             startActivity(recipeStep);
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+        switch (id) {
+            case android.R.id.home:
+                navigateUp();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    public void navigateUp() {
+        final Intent upIntent = NavUtils.getParentActivityIntent(this);
+        if (NavUtils.shouldUpRecreateTask(this, upIntent) || isTaskRoot()) {
+            TaskStackBuilder.create(this).addNextIntentWithParentStack(upIntent).startActivities();
+        } else {
+            NavUtils.navigateUpTo(this, upIntent);
         }
     }
 }
